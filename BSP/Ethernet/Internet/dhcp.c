@@ -5,7 +5,7 @@
 * @version 			V1.0
 * @date    			2015-02-14
 * @brief   			DHCP	Client
-* @attention		Ê¹ÓÃDHCPÅäÖÃIPµØÖ·ĞèÒª¶¨Òå
+* @attention		ä½¿ç”¨DHCPé…ç½®IPåœ°å€éœ€è¦å®šä¹‰
 ******************************************************************************
 */
 #include <stdio.h>
@@ -22,44 +22,44 @@
 
 DHCP_Get DHCP_GET;
 
-uint8*   SRC_MAC_ADDR   = EXTERN_DHCP_MAC;				/*±¾µØMACµØÖ·*/
-uint8*   GET_SN_MASK    = EXTERN_DHCP_SN;					/*´ÓDHCP·şÎñÆ÷»ñÈ¡µ½µÄ×ÓÍøÑÚÂë*/
-uint8*   GET_GW_IP      = EXTERN_DHCP_GW;					/*´ÓDHCP·şÎñÆ÷»ñÈ¡µ½µÄÍø¹ØµØÖ·*/
-uint8*   GET_DNS_IP     = EXTERN_DHCP_DNS;				/*´ÓDHCP·şÎñÆ÷»ñÈ¡µ½µÄDNS·şÎñÆ÷µØÖ·*/
-uint8*   DHCP_HOST_NAME = EXTERN_DHCP_NAME;   		/*Ö÷»úÃû*/
-uint8*   GET_SIP        = EXTERN_DHCP_SIP;				/*´ÓDHCP·şÎñÆ÷»ñÈ¡µ½µÄ±¾»úIP*/
-uint8    DHCP_SIP[4] = {0,};											/*ÒÑ·¢ÏÖµÄDNS·şÎñÆ÷µØÖ·*/
-uint8    DHCP_REAL_SIP[4] = {0,}; 								/*´ÓDHCPÁĞ±íÖĞÑ¡ÔñÊ¹ÓÃµÄDHCP·şÎñÆ÷*/
-uint8    OLD_SIP[4];        											/*×î³õ»ñÈ¡µ½µÄIPµØÖ·*/
+uint8*   SRC_MAC_ADDR   = EXTERN_DHCP_MAC;				/*æœ¬åœ°MACåœ°å€*/
+uint8*   GET_SN_MASK    = EXTERN_DHCP_SN;					/*ä»DHCPæœåŠ¡å™¨è·å–åˆ°çš„å­ç½‘æ©ç */
+uint8*   GET_GW_IP      = EXTERN_DHCP_GW;					/*ä»DHCPæœåŠ¡å™¨è·å–åˆ°çš„ç½‘å…³åœ°å€*/
+uint8*   GET_DNS_IP     = EXTERN_DHCP_DNS;				/*ä»DHCPæœåŠ¡å™¨è·å–åˆ°çš„DNSæœåŠ¡å™¨åœ°å€*/
+uint8*   DHCP_HOST_NAME = EXTERN_DHCP_NAME;   		/*ä¸»æœºå*/
+uint8*   GET_SIP        = EXTERN_DHCP_SIP;				/*ä»DHCPæœåŠ¡å™¨è·å–åˆ°çš„æœ¬æœºIP*/
+uint8    DHCP_SIP[4] = {0,};											/*å·²å‘ç°çš„DNSæœåŠ¡å™¨åœ°å€*/
+uint8    DHCP_REAL_SIP[4] = {0,}; 								/*ä»DHCPåˆ—è¡¨ä¸­é€‰æ‹©ä½¿ç”¨çš„DHCPæœåŠ¡å™¨*/
+uint8    OLD_SIP[4];        											/*æœ€åˆè·å–åˆ°çš„IPåœ°å€*/
 
-uint8		dhcp_state       = STATE_DHCP_READY;       /*DHCP¿Í»§¶Ë×´Ì¬*/
-uint8		dhcp_retry_count = 0;                      /*DHCPÖØÊÔ´ÎÊı*/
-uint8		DHCP_timeout     = 0;                      /*DHCP³¬Ê±±êÖ¾Î»*/
-uint32  dhcp_lease_time;													 /*×âÔ¼Ê±¼ä*/
-uint32	next_dhcp_time  = 0;											/*DHCP³¬Ê±Ê±¼ä*/
+uint8		dhcp_state       = STATE_DHCP_READY;       /*DHCPå®¢æˆ·ç«¯çŠ¶æ€*/
+uint8		dhcp_retry_count = 0;                      /*DHCPé‡è¯•æ¬¡æ•°*/
+uint8		DHCP_timeout     = 0;                      /*DHCPè¶…æ—¶æ ‡å¿—ä½*/
+uint32  dhcp_lease_time;													 /*ç§Ÿçº¦æ—¶é—´*/
+uint32	next_dhcp_time  = 0;											/*DHCPè¶…æ—¶æ—¶é—´*/
 uint32	dhcp_tick_cnt   = 0;                   	  
 uint8		DHCP_timer;
 
 uint8 Conflict_flag = 0;
 uint32  DHCP_XID        = DEFAULT_XID;				
 uint8 EXTERN_DHCPBUF[1024];
-RIP_MSG*  pRIPMSG = (RIP_MSG*)EXTERN_DHCPBUF;			/*DHCPÏûÏ¢Ö¸Õë*/
+RIP_MSG*  pRIPMSG = (RIP_MSG*)EXTERN_DHCPBUF;			/*DHCPæ¶ˆæ¯æŒ‡é’ˆ*/
 
 
-void  send_DHCP_DISCOVER(void);										/*ÏòDHCP·şÎñÆ÷·¢ËÍ·¢ÏÖ±¨ÎÄ*/
-void  send_DHCP_REQUEST(void);										/*ÏòDHCP·şÎñÆ÷·¢ËÍÇëÇó±¨ÎÄ*/
-void  send_DHCP_RELEASE_DECLINE(char msgtype);		/*ÏòDHCP·şÎñÆ÷·¢ËÍÊÍ·Å±¨ÎÄ*/
+void  send_DHCP_DISCOVER(void);										/*å‘DHCPæœåŠ¡å™¨å‘é€å‘ç°æŠ¥æ–‡*/
+void  send_DHCP_REQUEST(void);										/*å‘DHCPæœåŠ¡å™¨å‘é€è¯·æ±‚æŠ¥æ–‡*/
+void  send_DHCP_RELEASE_DECLINE(char msgtype);		/*å‘DHCPæœåŠ¡å™¨å‘é€é‡Šæ”¾æŠ¥æ–‡*/
 
-void  reset_DHCP_time(void);        							/*³õÊ¼»¯DHCP¼ÆÊ±Æ÷*/
-void  DHCP_timer_handler(void);     							/*DHCP¼ÆÊ±Æ÷*/
-void  check_DHCP_Timeout(void);     							/*¼ì²éÊÇ·ñ³¬Ê±*/
-uint8 check_leasedIP(void);												/*¼ì²é»ñÈ¡µÄIPÊÇ·ñ³åÍ»*/
-uint8 parseDHCPMSG(uint16 length);								/*´ÓDHCP·şÎñÆ÷½ÓÊÕÏûÏ¢²¢½âÎö*/
+void  reset_DHCP_time(void);        							/*åˆå§‹åŒ–DHCPè®¡æ—¶å™¨*/
+void  DHCP_timer_handler(void);     							/*DHCPè®¡æ—¶å™¨*/
+void  check_DHCP_Timeout(void);     							/*æ£€æŸ¥æ˜¯å¦è¶…æ—¶*/
+uint8 check_leasedIP(void);												/*æ£€æŸ¥è·å–çš„IPæ˜¯å¦å†²çª*/
+uint8 parseDHCPMSG(uint16 length);								/*ä»DHCPæœåŠ¡å™¨æ¥æ”¶æ¶ˆæ¯å¹¶è§£æ*/
 
 /**
-*@brief		DHCP¶¨Ê±³õÊ¼»¯
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		DHCPå®šæ—¶åˆå§‹åŒ–
+*@param		æ— 
+*@return	æ— 
 */
 void reset_DHCP_time(void)
 {
@@ -70,9 +70,9 @@ void reset_DHCP_time(void)
 }
 
 /**
-*@brief		·¢ËÍDISCOVERĞÅÏ¢¸øDHCP·şÎñÆ÷
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		å‘é€DISCOVERä¿¡æ¯ç»™DHCPæœåŠ¡å™¨
+*@param		æ— 
+*@return	æ— 
 */
 void send_DHCP_DISCOVER(void)
 {
@@ -82,7 +82,7 @@ void send_DHCP_DISCOVER(void)
 	uint8 host_name[12];
 	//*((uint32*)DHCP_SIP)=0;
 	//*((uint32*)DHCP_REAL_SIP)=0;
-	memset((void*)pRIPMSG,0,sizeof(RIP_MSG));				/*Çå¿ÕpRIPMSGµÄ sizeof(RIP_MSG)	¸ö¿Õ¼ä*/
+	memset((void*)pRIPMSG,0,sizeof(RIP_MSG));				/*æ¸…ç©ºpRIPMSGçš„ sizeof(RIP_MSG)	ä¸ªç©ºé—´*/
 	
 	pRIPMSG->op = DHCP_BOOTREQUEST;
 	pRIPMSG->htype = DHCP_HTYPE10MB;
@@ -156,9 +156,9 @@ void send_DHCP_DISCOVER(void)
 }
 
 /**
-*@brief		½«ÇëÇóÏûÏ¢·¢ËÍµ½DHCP·şÎñÆ÷
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		å°†è¯·æ±‚æ¶ˆæ¯å‘é€åˆ°DHCPæœåŠ¡å™¨
+*@param		æ— 
+*@return	æ— 
 */
 void send_DHCP_REQUEST(void)
 {
@@ -256,9 +256,9 @@ void send_DHCP_REQUEST(void)
 }
 
 /**
-*@brief		·¢ËÍÊÍ·ÅÏûÏ¢
-*@param		msgtype:ÊÇ·ñÎª7
-*@return	ÎŞ
+*@brief		å‘é€é‡Šæ”¾æ¶ˆæ¯
+*@param		msgtype:æ˜¯å¦ä¸º7
+*@return	æ— 
 */
 void send_DHCP_RELEASE_DECLINE(char msgtype)
 {
@@ -335,9 +335,9 @@ void send_DHCP_RELEASE_DECLINE(char msgtype)
 }
 
 /**	 
-*@brief	 	½âÎö»ñµÃµÄDHCPÏûÏ¢
-*@param		length:½âÎöÏûÏ¢³¤¶È
-*@return	0£º½âÎöÊ§°Ü  ÆäËû£º½âÎö³É¹¦
+*@brief	 	è§£æè·å¾—çš„DHCPæ¶ˆæ¯
+*@param		length:è§£ææ¶ˆæ¯é•¿åº¦
+*@return	0ï¼šè§£æå¤±è´¥  å…¶ä»–ï¼šè§£ææˆåŠŸ
 */
 uint8 parseDHCPMSG(uint16 length)
 {
@@ -493,28 +493,28 @@ uint8 parseDHCPMSG(uint16 length)
 }
 
 /**	
-*@brief	 	¼ì²éDHCP×´Ì¬
-*@param		s: socketÊı
-*@return	·µ»ØµÃµ½µÄDHCP×´Ì¬
-					DHCP_RET_NONE: Î´»ñÈ¡µ½IPµØÖ·
-					DHCP_RET_TIMEOUT:³¬Ê±
-					DHCP_RET_UPDATE: »ñÈ¡³É¹¦
-					DHCP_RET_CONFLICT:IPµØÖ·³åÍ»
+*@brief	 	æ£€æŸ¥DHCPçŠ¶æ€
+*@param		s: socketæ•°
+*@return	è¿”å›å¾—åˆ°çš„DHCPçŠ¶æ€
+					DHCP_RET_NONE: æœªè·å–åˆ°IPåœ°å€
+					DHCP_RET_TIMEOUT:è¶…æ—¶
+					DHCP_RET_UPDATE: è·å–æˆåŠŸ
+					DHCP_RET_CONFLICT:IPåœ°å€å†²çª
 */
 uint8 check_DHCP_state(SOCKET s) 
 {
-	uint16 len;   																			/*¶¨ÒåÒ»¸ö±íÊ¾½ÓÊÕÊı¾İ´óĞ¡±äÁ¿*/
-	uint8  type;																				/*¶¨ÒåÒ»¸ö±íÊ¾½ÓÊÕ·â°üÀàĞÍ±äÁ¿*/
+	uint16 len;   																			/*å®šä¹‰ä¸€ä¸ªè¡¨ç¤ºæ¥æ”¶æ•°æ®å¤§å°å˜é‡*/
+	uint8  type;																				/*å®šä¹‰ä¸€ä¸ªè¡¨ç¤ºæ¥æ”¶å°åŒ…ç±»å‹å˜é‡*/
 	
 	type = 0;
-	if(getSn_SR(s)!=SOCK_CLOSED)                        /*socket´¦ÓÚ´ò¿ª×´Ì¬*/
+	if(getSn_SR(s)!=SOCK_CLOSED)                        /*socketå¤„äºæ‰“å¼€çŠ¶æ€*/
 	{
-		if ((len = getSn_RX_RSR(s)) > 0)									/*½ÓÊÕµ½Êı¾İ*/
+		if ((len = getSn_RX_RSR(s)) > 0)									/*æ¥æ”¶åˆ°æ•°æ®*/
 		{
-			type = parseDHCPMSG(len);												/*½âÎöÊÕµ½µÄ·â°üÀàĞÍ*/
+			type = parseDHCPMSG(len);												/*è§£ææ”¶åˆ°çš„å°åŒ…ç±»å‹*/
 		}
 	}
-	else																								/*socket´¦ÓÚ¹Ø±Õ×´Ì¬£¬ÖØĞÂ³õÊ¼»¯socket*/
+	else																								/*socketå¤„äºå…³é—­çŠ¶æ€ï¼Œé‡æ–°åˆå§‹åŒ–socket*/
 	{
 		if(dhcp_state == STATE_DHCP_READY)
 		{
@@ -523,41 +523,41 @@ uint8 check_DHCP_state(SOCKET s)
 				printf("state : STATE_DHCP_READY\r\n");
 			#endif	   	
 		}	
-		if(!socket(SOCK_DHCP,Sn_MR_UDP,DHCP_CLIENT_PORT,0x00))/*³õÊ¼»¯socketºÍ¶Ë¿Ú*/
+		if(!socket(SOCK_DHCP,Sn_MR_UDP,DHCP_CLIENT_PORT,0x00))/*åˆå§‹åŒ–socketå’Œç«¯å£*/
 		{
 			#ifdef DHCP_DEBUG	   
 				printf("Fail to create the DHCPC_SOCK(%u)\r\n",SOCK_DHCP);
 			#endif   
-			return DHCP_RET_ERR;														/*socket³õÊ¼»¯´íÎó*/
+			return DHCP_RET_ERR;														/*socketåˆå§‹åŒ–é”™è¯¯*/
 		}
 	}
 	switch ( dhcp_state )
 	{
-		case STATE_DHCP_READY:													  /*DHCP³õÊ¼»¯×´Ì¬*/
-			DHCP_timeout = 0;																/*DHCP³¬Ê±±êÖ¾ÉèÖÃÎª1*/
-			reset_DHCP_time();															/*¸´Î»³¬Ê±Ê±¼ä*/
-			send_DHCP_DISCOVER();														/*·¢ËÍDISCOVER°ü*/
+		case STATE_DHCP_READY:													  /*DHCPåˆå§‹åŒ–çŠ¶æ€*/
+			DHCP_timeout = 0;																/*DHCPè¶…æ—¶æ ‡å¿—è®¾ç½®ä¸º1*/
+			reset_DHCP_time();															/*å¤ä½è¶…æ—¶æ—¶é—´*/
+			send_DHCP_DISCOVER();														/*å‘é€DISCOVERåŒ…*/
 	
 			DHCP_timer = 0;																	/*set_timer0(DHCP_timer_handler);  */ 	
-			dhcp_state = STATE_DHCP_DISCOVER;								/*DHCPµÄDISCOVER×´Ì¬*/
+			dhcp_state = STATE_DHCP_DISCOVER;								/*DHCPçš„DISCOVERçŠ¶æ€*/
 			break;	 
   
 		case STATE_DHCP_DISCOVER:
 			if (type == DHCP_OFFER) 
 			{
-				reset_DHCP_time();														/*¸´Î»³¬Ê±Ê±¼ä*/
-				send_DHCP_REQUEST();													/*·¢ËÍREQUEST°ü*/
+				reset_DHCP_time();														/*å¤ä½è¶…æ—¶æ—¶é—´*/
+				send_DHCP_REQUEST();													/*å‘é€REQUESTåŒ…*/
 				dhcp_state = STATE_DHCP_REQUEST;
 				#ifdef DHCP_DEBUG			
 					printf("state : STATE_DHCP_REQUEST\r\n");
 				#endif			
 			}
 			else 
-				check_DHCP_Timeout();													/*¼ì²éÊÇ·ñ³¬Ê±*/
+				check_DHCP_Timeout();													/*æ£€æŸ¥æ˜¯å¦è¶…æ—¶*/
 			break;
 		
-		case STATE_DHCP_REQUEST :													/*DHCPµÄREQUEST×´Ì¬*/
-			if (type == DHCP_ACK) 													/*½ÓÊÕµ½DHCP·şÎñÆ÷»ØÓ¦µÄoff·â°ü*/
+		case STATE_DHCP_REQUEST :													/*DHCPçš„REQUESTçŠ¶æ€*/
+			if (type == DHCP_ACK) 													/*æ¥æ”¶åˆ°DHCPæœåŠ¡å™¨å›åº”çš„offå°åŒ…*/
 			{
 				reset_DHCP_time();
 				if (check_leasedIP()) 
@@ -579,14 +579,14 @@ uint8 check_DHCP_state(SOCKET s)
 			}	
 			else if (type == DHCP_NAK) 
 			{
-				reset_DHCP_time();														/*¸´Î»³¬Ê±Ê±¼ä*/
+				reset_DHCP_time();														/*å¤ä½è¶…æ—¶æ—¶é—´*/
 				dhcp_state = STATE_DHCP_DISCOVER;
 				#ifdef DHCP_DEBUG				
 					printf("state : STATE_DHCP_DISCOVER\r\n");
 				#endif			
 			}
 			else 
-				check_DHCP_Timeout();													/*¼ì²éÊÇ·ñ³¬Ê±*/
+				check_DHCP_Timeout();													/*æ£€æŸ¥æ˜¯å¦è¶…æ—¶*/
 			break;
 			
 		case STATE_DHCP_LEASED :
@@ -650,9 +650,9 @@ uint8 check_DHCP_state(SOCKET s)
 }
 
 /**	
-*@brief	 	¼ì²éDHCPÇëÇóÊÍ·Å³¬Ê±
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief	 	æ£€æŸ¥DHCPè¯·æ±‚é‡Šæ”¾è¶…æ—¶
+*@param		æ— 
+*@return	æ— 
 */
 void check_DHCP_Timeout(void)
 {
@@ -705,9 +705,9 @@ void check_DHCP_Timeout(void)
 }
 
 /**	
-*@brief	  ¼ì²é»ñÈ¡µÄIPÊÇ·ñ³åÍ»
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief	  æ£€æŸ¥è·å–çš„IPæ˜¯å¦å†²çª
+*@param		æ— 
+*@return	æ— 
 */
  uint8 check_leasedIP(void)
 {
@@ -731,9 +731,9 @@ void check_DHCP_Timeout(void)
 }
 	
 /**	
-*@brief	 	DHCP ¶¨Ê±Æ÷²Ù×÷
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief	 	DHCP å®šæ—¶å™¨æ“ä½œ
+*@param		æ— 
+*@return	æ— 
 */
 void DHCP_timer_handler(void)
 {
@@ -745,9 +745,9 @@ void DHCP_timer_handler(void)
 }
 
 /**		 
-*@brief	  ³õÊ¼»¯DHCP¿Í»§¶Ë
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief	  åˆå§‹åŒ–DHCPå®¢æˆ·ç«¯
+*@param		æ— 
+*@return	æ— 
 */
 void init_dhcp_client(void)
 {
@@ -770,42 +770,42 @@ void init_dhcp_client(void)
 	#endif   
 }
 /**	
-*@brief	 	Ö´ĞĞDHCP Client
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief	 	æ‰§è¡ŒDHCP Client
+*@param		æ— 
+*@return	æ— 
 */
 void do_dhcp(void)
 {
 	uint8 dhcpret=0;
-	ip_from=IP_FROM_DHCP;	/*IPÅäÖÃ·½·¨Ñ¡ÔñÎªDHCP*/
-	dhcp_timer_init();																 /*³õÊ¼»¯DHCP¶¨Ê±Æ÷*/
+	ip_from=IP_FROM_DHCP;	/*IPé…ç½®æ–¹æ³•é€‰æ‹©ä¸ºDHCP*/
+	dhcp_timer_init();																 /*åˆå§‹åŒ–DHCPå®šæ—¶å™¨*/
 	if(Conflict_flag == 1)
 	{
-		init_dhcp_client();				                       /*³õÊ¼»¯DHCP¿Í»§¶Ë*/ 
+		init_dhcp_client();				                       /*åˆå§‹åŒ–DHCPå®¢æˆ·ç«¯*/ 
 		Conflict_flag =0;
 	}
 	
-	dhcpret = check_DHCP_state(SOCK_DHCP);             /*»ñÈ¡DHCP·şÎñ×´Ì¬*/
+	dhcpret = check_DHCP_state(SOCK_DHCP);             /*è·å–DHCPæœåŠ¡çŠ¶æ€*/
 	
 	switch(dhcpret)
 	{
-		case DHCP_RET_NONE:                              /*IPµØÖ·»ñÈ¡²»³É¹¦*/ 
+		case DHCP_RET_NONE:                              /*IPåœ°å€è·å–ä¸æˆåŠŸ*/ 
 			break;
 		
-		case DHCP_RET_TIMEOUT:                           /*IPµØÖ·»ñÈ¡³¬Ê±*/ 
+		case DHCP_RET_TIMEOUT:                           /*IPåœ°å€è·å–è¶…æ—¶*/ 
 			break;
 		
-		case DHCP_RET_UPDATE:														 /*³É¹¦»ñÈ¡µ½IPµØÖ·*/ 
+		case DHCP_RET_UPDATE:														 /*æˆåŠŸè·å–åˆ°IPåœ°å€*/ 
 		  dhcp_ok=1;                  
-			set_w5500_ip();                                /*½«»ñÈ¡µ½µÄIPµØÖ·Ğ´ÈëW5500¼Ä´æÆ÷*/ 
-			printf(" ÒÑ´ÓDHCP·şÎñÆ÷³É¹¦»ñµÃIPµØÖ·\r\n");
+			set_w5500_ip();                                /*å°†è·å–åˆ°çš„IPåœ°å€å†™å…¥W5500å¯„å­˜å™¨*/ 
+			printf(" å·²ä»DHCPæœåŠ¡å™¨æˆåŠŸè·å¾—IPåœ°å€\r\n");
 
 	    break;
 		
-		case DHCP_RET_CONFLICT:                          /*IPµØÖ·»ñÈ¡³åÍ»*/ 
-			printf(" ´ÓDHCP»ñÈ¡IPµØÖ·Ê§°Ü\r\n");
+		case DHCP_RET_CONFLICT:                          /*IPåœ°å€è·å–å†²çª*/ 
+			printf(" ä»DHCPè·å–IPåœ°å€å¤±è´¥\r\n");
       dhcp_state = STATE_DHCP_READY; 
-      printf(" ÖØÊÔÖĞ\r\n");
+      printf(" é‡è¯•ä¸­\r\n");
       dhcp_ok=0; 
 			break;     
 

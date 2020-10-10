@@ -4,7 +4,7 @@
 #include "stm32f4xx.h"
 #include "Types.h"
 
-extern uint16 udp_port;/*¶¨ÒåUDPµÄÒ»¸ö¶Ë¿Ú²¢³õÊ¼»¯*/
+extern uint16 udp_port;/*å®šä¹‰UDPçš„ä¸€ä¸ªç«¯å£å¹¶åˆå§‹åŒ–*/
 void do_udp(void);
 
 #endif 

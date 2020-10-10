@@ -4,11 +4,11 @@
 * @author  		WIZnet Software Team 
 * @version 		V1.0
 * @date    		2015-02-14
-* @brief  		ÅäÖÃMCU£¬ÒÆÖ²W5500³ÌĞòĞèÒªĞŞ¸ÄµÄÎÄ¼ş£¬ÅäÖÃW5500µÄMACºÍIPµØÖ·
+* @brief  		é…ç½®MCUï¼Œç§»æ¤W5500ç¨‹åºéœ€è¦ä¿®æ”¹çš„æ–‡ä»¶ï¼Œé…ç½®W5500çš„MACå’ŒIPåœ°å€
 **************************************************************************************************
 */
 /*
-  **  ĞŞ¸ÄÎªHAL¿â
+  **  ä¿®æ”¹ä¸ºHALåº“
   **  XieFeng
   **  xiefeng3321@qq.com
   **  2020-10-10
@@ -27,33 +27,33 @@
 #include "spi.h"
 #include "tim.h"
 
-unsigned int Timer2_Counter = 0; //Timer2¶¨Ê±Æ÷¼ÆÊı±äÁ¿(ms)
+unsigned int Timer2_Counter = 0; //Timer2å®šæ—¶å™¨è®¡æ•°å˜é‡(ms)
 
-CONFIG_MSG  ConfigMsg;																	/*ÅäÖÃ½á¹¹Ìå*/
-EEPROM_MSG_STR EEPROM_MSG;															/*EEPROM´æ´¢ĞÅÏ¢½á¹¹Ìå*/
+CONFIG_MSG  ConfigMsg;																	/*é…ç½®ç»“æ„ä½“*/
+EEPROM_MSG_STR EEPROM_MSG;															/*EEPROMå­˜å‚¨ä¿¡æ¯ç»“æ„ä½“*/
 
-/*¶¨ÒåMACµØÖ·,Èç¹û¶à¿éW5500ÍøÂçÊÊÅä°åÔÚÍ¬Ò»ÏÖ³¡¹¤×÷£¬ÇëÊ¹ÓÃ²»Í¬µÄMACµØÖ·*/
+/*å®šä¹‰MACåœ°å€,å¦‚æœå¤šå—W5500ç½‘ç»œé€‚é…æ¿åœ¨åŒä¸€ç°åœºå·¥ä½œï¼Œè¯·ä½¿ç”¨ä¸åŒçš„MACåœ°å€*/
 uint8 mac[6]={0x00,0x08,0xdc,0x11,0x11,0x11};
 
-/*¶¨ÒåÄ¬ÈÏIPĞÅÏ¢*/
-uint8 local_ip[4]   = {192,168,1,88};									  /*¶¨ÒåW5500Ä¬ÈÏIPµØÖ·*/
-uint8 subnet[4]     = {255,255,255,0};								  /*¶¨ÒåW5500Ä¬ÈÏ×ÓÍøÑÚÂë*/
-uint8 gateway[4]    = {192,168,1,1};									  /*¶¨ÒåW5500Ä¬ÈÏÍø¹Ø*/
-uint8 dns_server[4] = {114,114,114,114};							  /*¶¨ÒåW5500Ä¬ÈÏDNS*/
+/*å®šä¹‰é»˜è®¤IPä¿¡æ¯*/
+uint8 local_ip[4]   = {192,168,1,88};									  /*å®šä¹‰W5500é»˜è®¤IPåœ°å€*/
+uint8 subnet[4]     = {255,255,255,0};								  /*å®šä¹‰W5500é»˜è®¤å­ç½‘æ©ç */
+uint8 gateway[4]    = {192,168,1,1};									  /*å®šä¹‰W5500é»˜è®¤ç½‘å…³*/
+uint8 dns_server[4] = {114,114,114,114};							  /*å®šä¹‰W5500é»˜è®¤DNS*/
 
-uint16 local_port = 5000;	                       			  /*¶¨Òå±¾µØ¶Ë¿Ú*/
+uint16 local_port = 5000;	                       			  /*å®šä¹‰æœ¬åœ°ç«¯å£*/
 
-/*¶¨ÒåÔ¶¶ËIPĞÅÏ¢*/
-uint8  remote_ip[4] = {192,168,1,99};									  /*Ô¶¶ËIPµØÖ·*/
-uint16 remote_port = 5000;														  /*Ô¶¶Ë¶Ë¿ÚºÅ*/
+/*å®šä¹‰è¿œç«¯IPä¿¡æ¯*/
+uint8  remote_ip[4] = {192,168,1,99};									  /*è¿œç«¯IPåœ°å€*/
+uint16 remote_port = 5000;														  /*è¿œç«¯ç«¯å£å·*/
 
-/*IPÅäÖÃ·½·¨Ñ¡Ôñ£¬Çë×ÔĞĞÑ¡Ôñ*/
+/*IPé…ç½®æ–¹æ³•é€‰æ‹©ï¼Œè¯·è‡ªè¡Œé€‰æ‹©*/
 uint8	ip_from=IP_FROM_DEFINE;				
 
-uint8 dhcp_ok = 0;																		  /*dhcp³É¹¦»ñÈ¡IP*/
-uint32	ms = 0;																				  /*ºÁÃë¼ÆÊı*/
-uint32	dhcp_time = 0;																  /*DHCPÔËĞĞ¼ÆÊı*/
-vu8	ntptimer = 0;																				/*NPTÃë¼ÆÊı*/
+uint8 dhcp_ok = 0;																		  /*dhcpæˆåŠŸè·å–IP*/
+uint32	ms = 0;																				  /*æ¯«ç§’è®¡æ•°*/
+uint32	dhcp_time = 0;																  /*DHCPè¿è¡Œè®¡æ•°*/
+vu8	ntptimer = 0;																				/*NPTç§’è®¡æ•°*/
 
 
 
@@ -80,52 +80,52 @@ void SPI_FLASH_Init(void)
 uint8 SPI_FLASH_SendByte(uint8 byte)
 {
   uint8 data;
-  HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)&byte, (uint8_t*)&data, sizeof(data), 0xFFFF);//SPI·¢ËÍ½ÓÊÕÊı¾İ
+  HAL_SPI_TransmitReceive(&hspi1, (uint8_t*)&byte, (uint8_t*)&data, sizeof(data), 0xFFFF);//SPIå‘é€æ¥æ”¶æ•°æ®
   return data; 
 }
 
 /**
-*@brief		ÅäÖÃW5500µÄIPµØÖ·
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		é…ç½®W5500çš„IPåœ°å€
+*@param		æ— 
+*@return	æ— 
 */
 void set_w5500_ip(void)
 {	
- /*¸´ÖÆ¶¨ÒåµÄÅäÖÃĞÅÏ¢µ½ÅäÖÃ½á¹¹Ìå*/
+ /*å¤åˆ¶å®šä¹‰çš„é…ç½®ä¿¡æ¯åˆ°é…ç½®ç»“æ„ä½“*/
 	memcpy(ConfigMsg.mac, mac, 6);
 	memcpy(ConfigMsg.lip, local_ip, 4);
 	memcpy(ConfigMsg.sub, subnet, 4);
 	memcpy(ConfigMsg.gw, gateway, 4);
 	memcpy(ConfigMsg.dns, dns_server,4);
 	if(ip_from == IP_FROM_DEFINE)	
-  printf(" Ê¹ÓÃ¶¨ÒåµÄIPĞÅÏ¢ÅäÖÃW5500\r\n");
+  printf(" ä½¿ç”¨å®šä¹‰çš„IPä¿¡æ¯é…ç½®W5500\r\n");
 	
-	/*Ê¹ÓÃEEPROM´æ´¢µÄIP²ÎÊı*/	
+	/*ä½¿ç”¨EEPROMå­˜å‚¨çš„IPå‚æ•°*/	
 //	if(ip_from == IP_FROM_EEPROM)
 //	{
-//		/*´ÓEEPROMÖĞ¶ÁÈ¡IPÅäÖÃĞÅÏ¢*/
+//		/*ä»EEPROMä¸­è¯»å–IPé…ç½®ä¿¡æ¯*/
 //		read_config_from_eeprom();		
 //		
-//		/*Èç¹û¶ÁÈ¡EEPROMÖĞMACĞÅÏ¢,Èç¹ûÒÑÅäÖÃ£¬Ôò¿ÉÊ¹ÓÃ*/		
+//		/*å¦‚æœè¯»å–EEPROMä¸­MACä¿¡æ¯,å¦‚æœå·²é…ç½®ï¼Œåˆ™å¯ä½¿ç”¨*/		
 //		if( *(EEPROM_MSG.mac) == 0x00 && *(EEPROM_MSG.mac+1) == 0x08 && *(EEPROM_MSG.mac+2) == 0xdc)		
 //		{
 //			printf(" IP from EEPROM\r\n");
-//			/*¸´ÖÆEEPROMÅäÖÃĞÅÏ¢µ½ÅäÖÃµÄ½á¹¹Ìå±äÁ¿*/
+//			/*å¤åˆ¶EEPROMé…ç½®ä¿¡æ¯åˆ°é…ç½®çš„ç»“æ„ä½“å˜é‡*/
 //			memcpy(ConfigMsg.lip,EEPROM_MSG.lip, 4);				
 //			memcpy(ConfigMsg.sub,EEPROM_MSG.sub, 4);
 //			memcpy(ConfigMsg.gw, EEPROM_MSG.gw, 4);
 //		}
 //		else
 //		{
-//			printf(" EEPROMÎ´ÅäÖÃ,Ê¹ÓÃ¶¨ÒåµÄIPĞÅÏ¢ÅäÖÃW5500,²¢Ğ´ÈëEEPROM\r\n");
-//			write_config_to_eeprom();	/*Ê¹ÓÃÄ¬ÈÏµÄIPĞÅÏ¢£¬²¢³õÊ¼»¯EEPROMÖĞÊı¾İ*/
+//			printf(" EEPROMæœªé…ç½®,ä½¿ç”¨å®šä¹‰çš„IPä¿¡æ¯é…ç½®W5500,å¹¶å†™å…¥EEPROM\r\n");
+//			write_config_to_eeprom();	/*ä½¿ç”¨é»˜è®¤çš„IPä¿¡æ¯ï¼Œå¹¶åˆå§‹åŒ–EEPROMä¸­æ•°æ®*/
 //		}			
 //	}
 
-	/*Ê¹ÓÃDHCP»ñÈ¡IP²ÎÊı£¬Ğèµ÷ÓÃDHCP×Óº¯Êı*/		
+	/*ä½¿ç”¨DHCPè·å–IPå‚æ•°ï¼Œéœ€è°ƒç”¨DHCPå­å‡½æ•°*/		
 	if(ip_from == IP_FROM_DHCP)								
 	{
-		/*¸´ÖÆDHCP»ñÈ¡µÄÅäÖÃĞÅÏ¢µ½ÅäÖÃ½á¹¹Ìå*/
+		/*å¤åˆ¶DHCPè·å–çš„é…ç½®ä¿¡æ¯åˆ°é…ç½®ç»“æ„ä½“*/
 		if(dhcp_ok==1)
 		{
 			printf(" IP from DHCP\r\n");		 
@@ -136,32 +136,32 @@ void set_w5500_ip(void)
 		}
 		else
 		{
-			printf(" DHCP×Ó³ÌĞòÎ´ÔËĞĞ,»òÕß²»³É¹¦\r\n");
-			printf(" Ê¹ÓÃ¶¨ÒåµÄIPĞÅÏ¢ÅäÖÃW5500\r\n");
+			printf(" DHCPå­ç¨‹åºæœªè¿è¡Œ,æˆ–è€…ä¸æˆåŠŸ\r\n");
+			printf(" ä½¿ç”¨å®šä¹‰çš„IPä¿¡æ¯é…ç½®W5500\r\n");
 		}
 	}
 		
-	/*ÒÔÏÂÅäÖÃĞÅÏ¢£¬¸ù¾İĞèÒªÑ¡ÓÃ*/	
+	/*ä»¥ä¸‹é…ç½®ä¿¡æ¯ï¼Œæ ¹æ®éœ€è¦é€‰ç”¨*/	
 	ConfigMsg.sw_ver[0]=FW_VER_HIGH;
 	ConfigMsg.sw_ver[1]=FW_VER_LOW;	
 
-	/*½«IPÅäÖÃĞÅÏ¢Ğ´ÈëW5500ÏàÓ¦¼Ä´æÆ÷*/	
+	/*å°†IPé…ç½®ä¿¡æ¯å†™å…¥W5500ç›¸åº”å¯„å­˜å™¨*/	
 	setSUBR(ConfigMsg.sub);
 	setGAR(ConfigMsg.gw);
 	setSIPR(ConfigMsg.lip);
 	
 	getSIPR (local_ip);			
-	printf(" W5500 IPµØÖ·   : %d.%d.%d.%d\r\n", local_ip[0],local_ip[1],local_ip[2],local_ip[3]);
+	printf(" W5500 IPåœ°å€   : %d.%d.%d.%d\r\n", local_ip[0],local_ip[1],local_ip[2],local_ip[3]);
 	getSUBR(subnet);
-	printf(" W5500 ×ÓÍøÑÚÂë : %d.%d.%d.%d\r\n", subnet[0],subnet[1],subnet[2],subnet[3]);
+	printf(" W5500 å­ç½‘æ©ç  : %d.%d.%d.%d\r\n", subnet[0],subnet[1],subnet[2],subnet[3]);
 	getGAR(gateway);
-	printf(" W5500 Íø¹Ø     : %d.%d.%d.%d\r\n", gateway[0],gateway[1],gateway[2],gateway[3]);
+	printf(" W5500 ç½‘å…³     : %d.%d.%d.%d\r\n", gateway[0],gateway[1],gateway[2],gateway[3]);
 }
 
 /**
-*@brief		ÅäÖÃW5500µÄMACµØÖ·
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		é…ç½®W5500çš„MACåœ°å€
+*@param		æ— 
+*@return	æ— 
 */
 void set_w5500_mac(void)
 {
@@ -171,20 +171,20 @@ void set_w5500_mac(void)
 }
 
 /**
-*@brief		ÅäÖÃW5500µÄGPIO½Ó¿Ú
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		é…ç½®W5500çš„GPIOæ¥å£
+*@param		æ— 
+*@return	æ— 
 */
 void gpio_for_w5500_config(void)
 {
-  SPI_FLASH_Init();	        /*³õÊ¼»¯STM32 SPI1½Ó¿Ú*/ 
-  timer2_init();            //¿ªÆô¶¨Ê±Æ÷2
+  SPI_FLASH_Init();	        /*åˆå§‹åŒ–STM32 SPI1æ¥å£*/ 
+  timer2_init();            //å¼€å¯å®šæ—¶å™¨2
 }
 
 /**
-*@brief		W5500Æ¬Ñ¡ĞÅºÅÉèÖÃº¯Êı
-*@param		val: Îª¡°0¡±±íÊ¾Æ¬Ñ¡¶Ë¿ÚÎªµÍ£¬Îª¡°1¡±±íÊ¾Æ¬Ñ¡¶Ë¿ÚÎª¸ß
-*@return	ÎŞ
+*@brief		W5500ç‰‡é€‰ä¿¡å·è®¾ç½®å‡½æ•°
+*@param		val: ä¸ºâ€œ0â€è¡¨ç¤ºç‰‡é€‰ç«¯å£ä¸ºä½ï¼Œä¸ºâ€œ1â€è¡¨ç¤ºç‰‡é€‰ç«¯å£ä¸ºé«˜
+*@return	æ— 
 */
 void wiz_cs(uint8_t val)
 {
@@ -199,9 +199,9 @@ void wiz_cs(uint8_t val)
 }
 
 /**
-*@brief		ÉèÖÃW5500µÄÆ¬Ñ¡¶Ë¿ÚSCSnÎªµÍ
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		è®¾ç½®W5500çš„ç‰‡é€‰ç«¯å£SCSnä¸ºä½
+*@param		æ— 
+*@return	æ— 
 */
 void iinchip_csoff(void)
 {
@@ -209,9 +209,9 @@ void iinchip_csoff(void)
 }
 
 /**
-*@brief		ÉèÖÃW5500µÄÆ¬Ñ¡¶Ë¿ÚSCSnÎª¸ß
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		è®¾ç½®W5500çš„ç‰‡é€‰ç«¯å£SCSnä¸ºé«˜
+*@param		æ— 
+*@return	æ— 
 */
 void iinchip_cson(void)
 {	
@@ -219,9 +219,9 @@ void iinchip_cson(void)
 }
 
 /**
-*@brief		W5500¸´Î»ÉèÖÃº¯Êı
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		W5500å¤ä½è®¾ç½®å‡½æ•°
+*@param		æ— 
+*@return	æ— 
 */
 void reset_w5500(void)
 {
@@ -234,9 +234,9 @@ void reset_w5500(void)
 }
 
 /**
-*@brief		STM32 SPI1¶ÁĞ´8Î»Êı¾İ
-*@param		dat£ºĞ´ÈëµÄ8Î»Êı¾İ
-*@return	ÎŞ
+*@brief		STM32 SPI1è¯»å†™8ä½æ•°æ®
+*@param		datï¼šå†™å…¥çš„8ä½æ•°æ®
+*@return	æ— 
 */
 uint8 IINCHIP_SpiSendData(uint8 dat)
 {
@@ -244,10 +244,10 @@ uint8 IINCHIP_SpiSendData(uint8 dat)
 }
 
 /**
-*@brief		Ğ´ÈëÒ»¸ö8Î»Êı¾İµ½W5500
-*@param		addrbsb: Ğ´ÈëÊı¾İµÄµØÖ·
-*@param   data£ºĞ´ÈëµÄ8Î»Êı¾İ
-*@return	ÎŞ
+*@brief		å†™å…¥ä¸€ä¸ª8ä½æ•°æ®åˆ°W5500
+*@param		addrbsb: å†™å…¥æ•°æ®çš„åœ°å€
+*@param   dataï¼šå†™å…¥çš„8ä½æ•°æ®
+*@return	æ— 
 */
 void IINCHIP_WRITE( uint32 addrbsb,  uint8 data)
 {
@@ -260,10 +260,10 @@ void IINCHIP_WRITE( uint32 addrbsb,  uint8 data)
 }
 
 /**
-*@brief		´ÓW5500¶Á³öÒ»¸ö8Î»Êı¾İ
-*@param		addrbsb: Ğ´ÈëÊı¾İµÄµØÖ·
-*@param   data£º´ÓĞ´ÈëµÄµØÖ·´¦¶ÁÈ¡µ½µÄ8Î»Êı¾İ
-*@return	ÎŞ
+*@brief		ä»W5500è¯»å‡ºä¸€ä¸ª8ä½æ•°æ®
+*@param		addrbsb: å†™å…¥æ•°æ®çš„åœ°å€
+*@param   dataï¼šä»å†™å…¥çš„åœ°å€å¤„è¯»å–åˆ°çš„8ä½æ•°æ®
+*@return	æ— 
 */
 uint8 IINCHIP_READ(uint32 addrbsb)
 {
@@ -278,11 +278,11 @@ uint8 IINCHIP_READ(uint32 addrbsb)
 }
 
 /**
-*@brief		ÏòW5500Ğ´Èëlen×Ö½ÚÊı¾İ
-*@param		addrbsb: Ğ´ÈëÊı¾İµÄµØÖ·
-*@param   buf£ºĞ´Èë×Ö·û´®
-*@param   len£º×Ö·û´®³¤¶È
-*@return	len£º·µ»Ø×Ö·û´®³¤¶È
+*@brief		å‘W5500å†™å…¥lenå­—èŠ‚æ•°æ®
+*@param		addrbsb: å†™å…¥æ•°æ®çš„åœ°å€
+*@param   bufï¼šå†™å…¥å­—ç¬¦ä¸²
+*@param   lenï¼šå­—ç¬¦ä¸²é•¿åº¦
+*@return	lenï¼šè¿”å›å­—ç¬¦ä¸²é•¿åº¦
 */
 uint16 wiz_write_buf(uint32 addrbsb,uint8* buf,uint16 len)
 {
@@ -301,11 +301,11 @@ uint16 wiz_write_buf(uint32 addrbsb,uint8* buf,uint16 len)
 }
 
 /**
-*@brief		´ÓW5500¶Á³ölen×Ö½ÚÊı¾İ
-*@param		addrbsb: ¶ÁÈ¡Êı¾İµÄµØÖ·
-*@param 	buf£º´æ·Å¶ÁÈ¡Êı¾İ
-*@param		len£º×Ö·û´®³¤¶È
-*@return	len£º·µ»Ø×Ö·û´®³¤¶È
+*@brief		ä»W5500è¯»å‡ºlenå­—èŠ‚æ•°æ®
+*@param		addrbsb: è¯»å–æ•°æ®çš„åœ°å€
+*@param 	bufï¼šå­˜æ”¾è¯»å–æ•°æ®
+*@param		lenï¼šå­—ç¬¦ä¸²é•¿åº¦
+*@return	lenï¼šè¿”å›å­—ç¬¦ä¸²é•¿åº¦
 */
 uint16 wiz_read_buf(uint32 addrbsb, uint8* buf,uint16 len)
 {
@@ -327,9 +327,9 @@ uint16 wiz_read_buf(uint32 addrbsb, uint8* buf,uint16 len)
 }
 
 /**
-*@brief		Ğ´ÅäÖÃĞÅÏ¢µ½EEPROM
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		å†™é…ç½®ä¿¡æ¯åˆ°EEPROM
+*@param		æ— 
+*@return	æ— 
 */
 //void write_config_to_eeprom(void)
 //{
@@ -339,9 +339,9 @@ uint16 wiz_read_buf(uint32 addrbsb, uint8* buf,uint16 len)
 //}
 
 /**
-*@brief		´ÓEEPROM¶ÁÅäÖÃĞÅÏ¢
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		ä»EEPROMè¯»é…ç½®ä¿¡æ¯
+*@param		æ— 
+*@return	æ— 
 */
 //void read_config_from_eeprom(void)
 //{
@@ -350,20 +350,20 @@ uint16 wiz_read_buf(uint32 addrbsb, uint8* buf,uint16 len)
 //}
 
 /**
-*@brief		STM32¶¨Ê±Æ÷2³õÊ¼»¯
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		STM32å®šæ—¶å™¨2åˆå§‹åŒ–
+*@param		æ— 
+*@return	æ— 
 */
 void timer2_init(void)
 {
   //MX_TIM2_Init();
-  HAL_TIM_Base_Start_IT(&htim2);  //¿ªÆô¶¨Ê±Æ÷2
+  HAL_TIM_Base_Start_IT(&htim2);  //å¼€å¯å®šæ—¶å™¨2
 }
 
 /**
-*@brief		dhcpÓÃµ½µÄ¶¨Ê±Æ÷³õÊ¼»¯
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		dhcpç”¨åˆ°çš„å®šæ—¶å™¨åˆå§‹åŒ–
+*@param		æ— 
+*@return	æ— 
 */
 void dhcp_timer_init(void)
 {
@@ -371,9 +371,9 @@ void dhcp_timer_init(void)
 }
 
 /**
-*@brief		ntpÓÃµ½µÄ¶¨Ê±Æ÷³õÊ¼»¯
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		ntpç”¨åˆ°çš„å®šæ—¶å™¨åˆå§‹åŒ–
+*@param		æ— 
+*@return	æ— 
 */
 void ntp_timer_init(void)
 {
@@ -381,9 +381,9 @@ void ntp_timer_init(void)
 }
 
 /**
-*@brief		¶¨Ê±Æ÷2ÖĞ¶Ï»Øµ÷º¯Êı(ÔÚmain.cº¯ÊıÊµÏÖ)
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		å®šæ—¶å™¨2ä¸­æ–­å›è°ƒå‡½æ•°(åœ¨main.cå‡½æ•°å®ç°)
+*@param		æ— 
+*@return	æ— 
 */
 //void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //{
@@ -394,9 +394,9 @@ void ntp_timer_init(void)
 //    if(ms >= 1000)
 //    {  
 //      ms = 0;
-//      dhcp_time++;																					/*DHCP¶¨Ê±¼Ó1S*/
+//      dhcp_time++;																					/*DHCPå®šæ—¶åŠ 1S*/
 //      #ifndef	__NTP_H__
-//      ntptimer++;																						/*NTPÖØÊÔÊ±¼ä¼Ó1S*/
+//      ntptimer++;																						/*NTPé‡è¯•æ—¶é—´åŠ 1S*/
 //      #endif
 //    }
 //  }
@@ -404,9 +404,9 @@ void ntp_timer_init(void)
 
 
 /**
-*@brief	  ºÁÃëÑÓÊ±º¯Êı(²»¿ÉÖØÈëº¯Êı£¬Ö»×ö³õÊ¼»¯µ÷ÓÃ)
-*@param		time_ms:ÒªÑÓÊ±ºÁÃëÊ±¼äÊı,tim2ÊµÏÖ
-*@return	ÎŞ
+*@brief	  æ¯«ç§’å»¶æ—¶å‡½æ•°(ä¸å¯é‡å…¥å‡½æ•°ï¼Œåªåšåˆå§‹åŒ–è°ƒç”¨)
+*@param		time_ms:è¦å»¶æ—¶æ¯«ç§’æ—¶é—´æ•°,tim2å®ç°
+*@return	æ— 
 */
 void delay_ms( uint32 time_ms )
 {	 		  	  
@@ -415,9 +415,9 @@ void delay_ms( uint32 time_ms )
 }   
 
 /**
-*@brief		STM32ÏµÍ³Èí¸´Î»º¯Êı
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		STM32ç³»ç»Ÿè½¯å¤ä½å‡½æ•°
+*@param		æ— 
+*@return	æ— 
 */
 typedef __IO uint32_t  vu32;
 
@@ -425,7 +425,7 @@ void reboot(void)
 {
   pFunction Jump_To_Application;
   uint32 JumpAddress;
-  printf(" ÏµÍ³ÖØÆôÖĞ¡­¡­\r\n");
+  printf(" ç³»ç»Ÿé‡å¯ä¸­â€¦â€¦\r\n");
   JumpAddress = *(vu32*) (0x00000004);
   Jump_To_Application = (pFunction) JumpAddress;
   Jump_To_Application();

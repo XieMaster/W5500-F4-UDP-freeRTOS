@@ -4,7 +4,7 @@
 * @author  		WIZnet Software Team 
 * @version 		V1.0
 * @date    		2015-xx-xx
-* @brief   		Socket±à³ÌÏà¹Øº¯Êý 
+* @brief   		Socketç¼–ç¨‹ç›¸å…³å‡½æ•° 
 ******************************************************************************
 */
 #include "socket.h"
@@ -338,7 +338,7 @@ uint16 recvfrom(SOCKET s, uint8 * buf, uint16 len, uint8 * addr, uint16 *port)
 				printf("%d  %d\r\n",head[6],head[7]);
         data_len = head[6];
         data_len = (data_len << 8) + head[7];
-        addrbsb = (uint32)(ptr<<8) +  (s<<5) + 0x18;//0X18´ú±íÑ¡Ôñsocketn½ÓÊÜ»º´æ
+        addrbsb = (uint32)(ptr<<8) +  (s<<5) + 0x18;//0X18ä»£è¡¨é€‰æ‹©socketnæŽ¥å—ç¼“å­˜
 				printf(" %d \r\n",data_len);
         wiz_read_buf(addrbsb, buf, data_len);                
         ptr += data_len;
@@ -360,7 +360,7 @@ uint16 recvfrom(SOCKET s, uint8 * buf, uint16 len, uint8 * addr, uint16 *port)
 
         addrbsb  = (uint32)(ptr<<8) +  (s<<5) + 0x18;
 	   
-//		printf(" data£º%d \r\n",data_len);
+//		printf(" dataï¼š%d \r\n",data_len);
         wiz_read_buf(addrbsb, buf, data_len);
 		 	        
         ptr += data_len;

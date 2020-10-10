@@ -4,7 +4,7 @@
 * @author  		WIZnet Software Team 
 * @version 		V1.0
 * @date    		2015-02-14
-* @brief   		UDPÑİÊ¾º¯Êı
+* @brief   		UDPæ¼”ç¤ºå‡½æ•°
 ******************************************************************************
 **/
 #include <stdio.h>
@@ -17,32 +17,32 @@
 #include "main.h"
 
 /**
-*@brief		UDP²âÊÔ³ÌĞò
-*@param		ÎŞ
-*@return	ÎŞ
+*@brief		UDPæµ‹è¯•ç¨‹åº
+*@param		æ— 
+*@return	æ— 
 */
 void do_udp(void)
 {                                                              
 	uint16 len = 0;
-	uint8 buff[2048];    // 2048                                                    /*¶¨ÒåÒ»¸ö2KBµÄ»º´æ*/	
-	switch(getSn_SR(SOCK_UDPS))                                               /*»ñÈ¡socketµÄ×´Ì¬*/
+	uint8 buff[2048];    // 2048                                                    /*å®šä¹‰ä¸€ä¸ª2KBçš„ç¼“å­˜*/	
+	switch(getSn_SR(SOCK_UDPS))                                               /*è·å–socketçš„çŠ¶æ€*/
 	{
-		case SOCK_CLOSED:                                                       /*socket´¦ÓÚ¹Ø±Õ×´Ì¬*/
-			socket(SOCK_UDPS, Sn_MR_UDP, local_port, 0);                          /*³õÊ¼»¯socket*/
+		case SOCK_CLOSED:                                                       /*socketå¤„äºå…³é—­çŠ¶æ€*/
+			socket(SOCK_UDPS, Sn_MR_UDP, local_port, 0);                          /*åˆå§‹åŒ–socket*/
 		  break;
-		case SOCK_UDP:                                                           /*socket³õÊ¼»¯Íê³É*/
+		case SOCK_UDP:                                                           /*socketåˆå§‹åŒ–å®Œæˆ*/
    
 //			HAL_Delay(10);
 			if(getSn_IR(SOCK_UDPS) & Sn_IR_RECV)
 			{
-				setSn_IR(SOCK_UDPS, Sn_IR_RECV);                                     /*Çå½ÓÊÕÖĞ¶Ï*/
+				setSn_IR(SOCK_UDPS, Sn_IR_RECV);                                     /*æ¸…æ¥æ”¶ä¸­æ–­*/
 			}
-			if((len = getSn_RX_RSR(SOCK_UDPS)) > 0)                                 /*½ÓÊÕµ½Êı¾İ*/
+			if((len = getSn_RX_RSR(SOCK_UDPS)) > 0)                                 /*æ¥æ”¶åˆ°æ•°æ®*/
 			{
-				recvfrom(SOCK_UDPS, buff, len, remote_ip, &remote_port);              /*W5500½ÓÊÕ¼ÆËã»ú·¢ËÍÀ´µÄÊı¾İ*/
-				buff[len-8]=0x00;                                                     /*Ìí¼Ó×Ö·û´®½áÊø·û*/
-				printf("%s\r\n", buff);                                               /*´òÓ¡½ÓÊÕ»º´æ*/ 
-				sendto(SOCK_UDPS, buff, len-8, remote_ip, remote_port);               /*W5500°Ñ½ÓÊÕµ½µÄÊı¾İ·¢ËÍ¸øRemote*/
+				recvfrom(SOCK_UDPS, buff, len, remote_ip, &remote_port);              /*W5500æ¥æ”¶è®¡ç®—æœºå‘é€æ¥çš„æ•°æ®*/
+				buff[len-8]=0x00;                                                     /*æ·»åŠ å­—ç¬¦ä¸²ç»“æŸç¬¦*/
+				printf("%s\r\n", buff);                                               /*æ‰“å°æ¥æ”¶ç¼“å­˜*/ 
+				sendto(SOCK_UDPS, buff, len-8, remote_ip, remote_port);               /*W5500æŠŠæ¥æ”¶åˆ°çš„æ•°æ®å‘é€ç»™Remote*/
 			}
 			break;
 	}

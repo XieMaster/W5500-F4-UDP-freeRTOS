@@ -22,12 +22,12 @@
 
 /* USER CODE BEGIN 0 */
 #include "stdio.h"
-//´®¿Ú·¢ËÍprintfµÄÖØ¶¨Ïò
+//ä¸²å£å‘é€printfçš„é‡å®šå‘
 int fputc(int ch,FILE *f)
 {
   uint32_t temp = ch;
   HAL_UART_Transmit(&huart1,(uint8_t *)&temp,1,1000);        
-  while(__HAL_UART_GET_FLAG(&huart1,UART_FLAG_TC)!=SET);		//µÈ´ı·¢ËÍ½áÊø
+  while(__HAL_UART_GET_FLAG(&huart1,UART_FLAG_TC)!=SET);		//ç­‰å¾…å‘é€ç»“æŸ
   return ch;
 }
 

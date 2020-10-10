@@ -132,11 +132,11 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
-  printf("进入任务1: UDP数据回环测试\r\n"); 
+  printf("杩涘叆浠诲姟1: UDP鏁版嵁鍥炵幆娴嬭瘯\r\n"); 
   /* Infinite loop */
   for(;;)
   { 
-    do_udp();                         /*UDP 数据回环测试*/
+    do_udp();                         /*UDP 鏁版嵁鍥炵幆娴嬭瘯*/
     osDelay(200);
   }
   /* USER CODE END StartDefaultTask */

@@ -5,7 +5,7 @@
 #include "stm32f4xx.h"
 #include "Types.h"
 
-/*Socket ¶Ë¿ÚÑ¡Ôñ£¬¿É°´×Ô¼ºµÄÏ°¹ß¶¨Òå*/
+/*Socket ç«¯å£é€‰æ‹©ï¼Œå¯æŒ‰è‡ªå·±çš„ä¹ æƒ¯å®šä¹‰*/
 #define SOCK_TCPS             0
 #define SOCK_HUMTEM			  		0
 #define SOCK_PING			  			0
@@ -17,7 +17,7 @@
 #define SOCK_DNS              5
 #define SOCK_SMTP             6
 #define SOCK_NTP              7
-//#define NETBIOS_SOCK    6 //ÔÚnetbios.cÒÑ¶¨Òå
+//#define NETBIOS_SOCK    6 //åœ¨netbios.cå·²å®šä¹‰
 
 extern uint8 socket(SOCKET s, uint8 protocol, uint16 port, uint8 flag); // Opens a socket(TCP or UDP or IP_RAW mode)
 extern void close(SOCKET s); // Close socket

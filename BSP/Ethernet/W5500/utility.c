@@ -4,7 +4,7 @@
 * @author  			WIZnet Software Team 
 * @version 			V1.0
 * @date    			2015-02-14
-* @brief 				¹«¹²ÊµÓÃº¯Êı ÑÓÊ±º¯Êı Êı¾İ¸ñÊ½×ª»» 
+* @brief 				å…¬å…±å®ç”¨å‡½æ•° å»¶æ—¶å‡½æ•° æ•°æ®æ ¼å¼è½¬æ¢ 
 ******************************************************************************
 */
 #include "w5500.h"
@@ -16,25 +16,25 @@
 #include <stdarg.h>
 
 
-//static uint8  fac_us=0;																										/*usÑÓÊ±±¶³ËÊı*/
-//static uint16 fac_ms=0;																										/*msÑÓÊ±±¶³ËÊı*/
+//static uint8  fac_us=0;																										/*uså»¶æ—¶å€ä¹˜æ•°*/
+//static uint16 fac_ms=0;																										/*mså»¶æ—¶å€ä¹˜æ•°*/
 
 /**
-*@brief		³õÊ¼»¯ÑÓ³Ùº¯Êı
-*@param		SYSCLK:ÏµÍ³Ê±ÖÓ
-*@return	ÎŞ
+*@brief		åˆå§‹åŒ–å»¶è¿Ÿå‡½æ•°
+*@param		SYSCLK:ç³»ç»Ÿæ—¶é’Ÿ
+*@return	æ— 
 */
 //void systick_init (uint8 sysclk)
 //{
-//	SysTick->CTRL&=0xfffffffb;																						/*bit2Çå¿Õ,Ñ¡ÔñÍâ²¿Ê±ÖÓ  HCLK/8*/
+//	SysTick->CTRL&=0xfffffffb;																						/*bit2æ¸…ç©º,é€‰æ‹©å¤–éƒ¨æ—¶é’Ÿ  HCLK/8*/
 //	fac_us=sysclk/8;		    
 //	fac_ms=(uint16)fac_us*1000;
 //}								    
 
 /**
-*@brief	  ÃëÑÓÊ±º¯Êı
-*@param		time_s:ÒªÑÓÊ±ÃëÊ±¼äÊı
-*@return	ÎŞ
+*@brief	  ç§’å»¶æ—¶å‡½æ•°
+*@param		time_s:è¦å»¶æ—¶ç§’æ—¶é—´æ•°
+*@return	æ— 
 */
 //void delay_s( uint32 time_s )
 //{
@@ -43,49 +43,49 @@
 //}
 
 /**
-*@brief	  ºÁÃëÑÓÊ±º¯Êı
-*@param		time_ms:ÒªÑÓÊ±ºÁÃëÊ±¼äÊı
-*@return	ÎŞ
+*@brief	  æ¯«ç§’å»¶æ—¶å‡½æ•°
+*@param		time_ms:è¦å»¶æ—¶æ¯«ç§’æ—¶é—´æ•°
+*@return	æ— 
 */
 //void delay_ms( uint32 time_ms )
 //{	 		  	  
 //	uint32 temp;		   
-////	SysTick->LOAD=(uint32)time_ms*fac_ms;																		/*Ê±¼ä¼ÓÔØ(SysTick->LOADÎª24bit)*/
-////	SysTick->VAL =0x00;           																				/*Çå¿Õ¼ÆÊıÆ÷*/
-////	SysTick->CTRL=0x01 ;         																					/*¿ªÊ¼µ¹Êı*/ 
+////	SysTick->LOAD=(uint32)time_ms*fac_ms;																		/*æ—¶é—´åŠ è½½(SysTick->LOADä¸º24bit)*/
+////	SysTick->VAL =0x00;           																				/*æ¸…ç©ºè®¡æ•°å™¨*/
+////	SysTick->CTRL=0x01 ;         																					/*å¼€å§‹å€’æ•°*/ 
 ////	do
 ////	{
 ////		temp=SysTick->CTRL;
 ////	}
-////	while(temp&0x01&&!(temp&(1<<16)));																		/*µÈ´ıÊ±¼äµ½´ï*/
-////	SysTick->CTRL=0x00;       																						/*¹Ø±Õ¼ÆÊıÆ÷*/
-////	SysTick->VAL =0X00;      																							/*Çå¿Õ¼ÆÊıÆ÷*/	  	    
+////	while(temp&0x01&&!(temp&(1<<16)));																		/*ç­‰å¾…æ—¶é—´åˆ°è¾¾*/
+////	SysTick->CTRL=0x00;       																						/*å…³é—­è®¡æ•°å™¨*/
+////	SysTick->VAL =0X00;      																							/*æ¸…ç©ºè®¡æ•°å™¨*/	  	    
 //}   
 
 /**
-*@brief	  Î¢ÃëÑÓÊ±º¯Êı
-*@param		time_ms:ÒªÑÓÊ±Î¢ÃëÊ±¼äÊı
-*@return	ÎŞ
+*@brief	  å¾®ç§’å»¶æ—¶å‡½æ•°
+*@param		time_ms:è¦å»¶æ—¶å¾®ç§’æ—¶é—´æ•°
+*@return	æ— 
 */
 //void delay_us( uint32 time_us )
 //{		
 //	uint32 temp;	    	 
-////	SysTick->LOAD=time_us*fac_us; 																				/*Ê±¼ä¼ÓÔØ*/	  		 
-////	SysTick->VAL=0x00;        																						/*Çå¿Õ¼ÆÊıÆ÷*/
-////	SysTick->CTRL=0x01 ;      																						/*¿ªÊ¼µ¹Êı */	 
+////	SysTick->LOAD=time_us*fac_us; 																				/*æ—¶é—´åŠ è½½*/	  		 
+////	SysTick->VAL=0x00;        																						/*æ¸…ç©ºè®¡æ•°å™¨*/
+////	SysTick->CTRL=0x01 ;      																						/*å¼€å§‹å€’æ•° */	 
 ////	do
 ////	{
 ////		temp=SysTick->CTRL;
 ////	}
-////	while(temp&0x01&&!(temp&(1<<16)));																		/*µÈ´ıÊ±¼äµ½´ï*/
-////	SysTick->CTRL=0x00;       																						/*¹Ø±Õ¼ÆÊıÆ÷*/
-////	SysTick->VAL =0X00;       																						/*Çå¿Õ¼ÆÊıÆ÷*/
+////	while(temp&0x01&&!(temp&(1<<16)));																		/*ç­‰å¾…æ—¶é—´åˆ°è¾¾*/
+////	SysTick->CTRL=0x00;       																						/*å…³é—­è®¡æ•°å™¨*/
+////	SysTick->VAL =0X00;       																						/*æ¸…ç©ºè®¡æ•°å™¨*/
 //}
 
 /**
-*@brief	 	×Ö·û×ª×ª»¯Îª8Î»ÕûĞÍº¯Êı
-*@param		str:Òª×ª»¯×Ö·û´®£¬ base:
-*@return	num:·µ»Ø×ª»¯ºóµÄÕûĞÍÊı
+*@brief	 	å­—ç¬¦è½¬è½¬åŒ–ä¸º8ä½æ•´å‹å‡½æ•°
+*@param		str:è¦è½¬åŒ–å­—ç¬¦ä¸²ï¼Œ base:
+*@return	num:è¿”å›è½¬åŒ–åçš„æ•´å‹æ•°
 */
 uint16 atoi16(char* str,uint16 base	)
 {
@@ -96,9 +96,9 @@ uint16 atoi16(char* str,uint16 base	)
 }
 
 /**
-*@brief	 	×Ö·û×ª×ª»¯Îª32Î»ÕûĞÍº¯Êı
-*@param		str:Òª×ª»¯×Ö·û´®£¬ base:
-*@return	num:·µ»Ø×ª»¯ºóµÄÕûĞÍÊı
+*@brief	 	å­—ç¬¦è½¬è½¬åŒ–ä¸º32ä½æ•´å‹å‡½æ•°
+*@param		str:è¦è½¬åŒ–å­—ç¬¦ä¸²ï¼Œ base:
+*@return	num:è¿”å›è½¬åŒ–åçš„æ•´å‹æ•°
 */
 uint32 atoi32(char* str,uint16 base	)
 {
@@ -109,9 +109,9 @@ uint32 atoi32(char* str,uint16 base	)
 }
 
 /**
-*@brief	 	ÕûĞÍÊı×ª»¯Îª×Ö·û´®º¯Êı
-*@param		n:Òª×ª»¯ÕûÊı£¬ str[5]:´æ·Å×ª»¯ºóµÄ×Ö·û´®  len£ºÕûĞÍÊı³¤¶È
-*@return	ÎŞ
+*@brief	 	æ•´å‹æ•°è½¬åŒ–ä¸ºå­—ç¬¦ä¸²å‡½æ•°
+*@param		n:è¦è½¬åŒ–æ•´æ•°ï¼Œ str[5]:å­˜æ”¾è½¬åŒ–åçš„å­—ç¬¦ä¸²  lenï¼šæ•´å‹æ•°é•¿åº¦
+*@return	æ— 
 */
 void itoa(uint16 n,uint8 str[5], uint8 len)
 {
@@ -129,9 +129,9 @@ void itoa(uint16 n,uint8 str[5], uint8 len)
 
 
 /**
-*@brief	 	°Ñ×Ö·û´®×ª»¯ÎªÊ®½øÖÆ»òÊ®Áù½øÖÆÊıº¯Êı
-*@param		str:Òª×ª»¯×Ö·û´®£¬ len£ºÕûĞÍÊı³¤¶È
-*@return	³É¹¦ - 1, Ê§°Ü - 0
+*@brief	 	æŠŠå­—ç¬¦ä¸²è½¬åŒ–ä¸ºåè¿›åˆ¶æˆ–åå…­è¿›åˆ¶æ•°å‡½æ•°
+*@param		str:è¦è½¬åŒ–å­—ç¬¦ä¸²ï¼Œ lenï¼šæ•´å‹æ•°é•¿åº¦
+*@return	æˆåŠŸ - 1, å¤±è´¥ - 0
 */
 int validatoi(char* str, int base,int* ret)
 {
@@ -150,9 +150,9 @@ int validatoi(char* str, int base,int* ret)
 }
 
 /**
-*@brief	 	ÓÃĞÂµÄ×Ö·ûÈ¥Ìæ»»×Ö·û´®ÖĞÌØÊâµÄ×Ö·û
-*@param		str:Ìæ»»ºó×Ö·û´®£¬oldchar:ÌØÊâµÄ×Ö·û£¬newchar£ºĞÂµÄ×Ö·û	
-*@return	ÎŞ
+*@brief	 	ç”¨æ–°çš„å­—ç¬¦å»æ›¿æ¢å­—ç¬¦ä¸²ä¸­ç‰¹æ®Šçš„å­—ç¬¦
+*@param		str:æ›¿æ¢åå­—ç¬¦ä¸²ï¼Œoldchar:ç‰¹æ®Šçš„å­—ç¬¦ï¼Œnewcharï¼šæ–°çš„å­—ç¬¦	
+*@return	æ— 
 */
 void replacetochar(char * str,	char oldchar,char newchar	)
 {
@@ -162,9 +162,9 @@ void replacetochar(char * str,	char oldchar,char newchar	)
 }
 
 /**
-*@brief	 	°ÑÊ®½øÖÆÊı×ª»¯Îª×Ö·ûĞÍ
-*@param		c:Òª×ª»¯Ê®½øÖÆÊı¾İ
-*@return	·µ»ØÒ»¸ö×Ö·ûĞÍÊı¾İ
+*@brief	 	æŠŠåè¿›åˆ¶æ•°è½¬åŒ–ä¸ºå­—ç¬¦å‹
+*@param		c:è¦è½¬åŒ–åè¿›åˆ¶æ•°æ®
+*@return	è¿”å›ä¸€ä¸ªå­—ç¬¦å‹æ•°æ®
 */
 char c2d(uint8 c)
 {
@@ -179,9 +179,9 @@ char c2d(uint8 c)
 }
 
 /**
-*@brief	 	16Î»×Ö·û¸ß8Î»µÍ8Î»×ª»»
-*@param		i:Òª×ª»¯µÄÊı¾İ
-*@return	×ª»»ºóµÄÊı¾İ
+*@brief	 	16ä½å­—ç¬¦é«˜8ä½ä½8ä½è½¬æ¢
+*@param		i:è¦è½¬åŒ–çš„æ•°æ®
+*@return	è½¬æ¢åçš„æ•°æ®
 */
 uint16 swaps(uint16 i)
 {
@@ -191,9 +191,9 @@ uint16 swaps(uint16 i)
   return ret;	
 }
 /**
-*@brief	 	32Î»×Ö·û¸ßµÍÎ»±ä»»
-*@param		i:Òª×ª»¯µÄÊı¾İ
-*@return	×ª»»ºóµÄÊı¾İ
+*@brief	 	32ä½å­—ç¬¦é«˜ä½ä½å˜æ¢
+*@param		i:è¦è½¬åŒ–çš„æ•°æ®
+*@return	è½¬æ¢åçš„æ•°æ®
 */
 uint32 swapl(uint32 l)
 {
@@ -206,9 +206,9 @@ uint32 swapl(uint32 l)
 }
 
 /**
-*@brief	 	×Ö·û´®´¦Àí
-*@param		srcÄ¿±ê×Ö·û´® s1 s2²Ù×÷×Ö·û´®
-*@return	ÎŞ
+*@brief	 	å­—ç¬¦ä¸²å¤„ç†
+*@param		srcç›®æ ‡å­—ç¬¦ä¸² s1 s2æ“ä½œå­—ç¬¦ä¸²
+*@return	æ— 
 */
 void mid(int8* src, int8* s1, int8* s2, int8* sub)
 {
@@ -225,9 +225,9 @@ void mid(int8* src, int8* s1, int8* s2, int8* sub)
 }
 
 /**
-*@brief	 	ipÍøÂçµØÖ·×ª»»
-*@param		adr£ºµØÖ· ip£ºip
-*@return	ÎŞ
+*@brief	 	ipç½‘ç»œåœ°å€è½¬æ¢
+*@param		adrï¼šåœ°å€ ipï¼šip
+*@return	æ— 
 */
 void inet_addr_(unsigned char* addr,unsigned char *ip)
 {
@@ -250,9 +250,9 @@ void inet_addr_(unsigned char* addr,unsigned char *ip)
 }	
  
 /**
-*@brief	 	½«32µØÖ·×ª»¯ÎªÊ®½øÖÆ¸ñÊ½
-*@param		addr:  Òª×ª»¯µØÖ·
-*@return	·µ»ØÊ®½øÖÆ¸ñÊ½µØÖ·
+*@brief	 	å°†32åœ°å€è½¬åŒ–ä¸ºåè¿›åˆ¶æ ¼å¼
+*@param		addr:  è¦è½¬åŒ–åœ°å€
+*@return	è¿”å›åè¿›åˆ¶æ ¼å¼åœ°å€
 */
 char* inet_ntoa(
 	unsigned long addr	
@@ -265,9 +265,9 @@ char* inet_ntoa(
 }
 
 /**
-*@brief	 	½«16µØÖ·×ª»¯ÎªÊ®½øÖÆ¸ñÊ½
-*@param		addr:  Òª×ª»¯µØÖ·
-*@return	·µ»ØÊ®½øÖÆ¸ñÊ½µØÖ·
+*@brief	 	å°†16åœ°å€è½¬åŒ–ä¸ºåè¿›åˆ¶æ ¼å¼
+*@param		addr:  è¦è½¬åŒ–åœ°å€
+*@return	è¿”å›åè¿›åˆ¶æ ¼å¼åœ°å€
 */
 char* inet_ntoa_pad(unsigned long addr)
 {
@@ -278,9 +278,9 @@ char* inet_ntoa_pad(unsigned long addr)
 }
  
 /**
-*@brief	 	ÑéÖ¤IPµØÖ·
+*@brief	 	éªŒè¯IPåœ°å€
 *@param		ip addr
-*@return	³É¹¦ - 1, Ê§°Ü - 0
+*@return	æˆåŠŸ - 1, å¤±è´¥ - 0
 */
 char verify_ip_address(char* src, uint8 * ip)
 {
@@ -310,9 +310,9 @@ char verify_ip_address(char* src, uint8 * ip)
 }
 
 /**
-*@brief		½«Ò»¸ö Ö÷»úÄ£Ê½µÄunsigned shortĞÍÊı¾İ×ª»»µ½´ó¶ËÄ£Ê½µÄTCP/IP ÍøÂç×Ö½Ú¸ñÊ½µÄÊı¾İ.
-*@param		Òª×ª»»µÄÊı¾İ
-*@return 	´ó¶ËÄ£Ê½µÄÊı¾İ
+*@brief		å°†ä¸€ä¸ª ä¸»æœºæ¨¡å¼çš„unsigned shortå‹æ•°æ®è½¬æ¢åˆ°å¤§ç«¯æ¨¡å¼çš„TCP/IP ç½‘ç»œå­—èŠ‚æ ¼å¼çš„æ•°æ®.
+*@param		è¦è½¬æ¢çš„æ•°æ®
+*@return 	å¤§ç«¯æ¨¡å¼çš„æ•°æ®
 */ 
 uint16 htons( 
 	uint16 hostshort	/**< A 16-bit number in host byte order.  */
@@ -326,9 +326,9 @@ uint16 htons(
 }
 
 /**
-*@brief		½«Ò»¸ö Ö÷»úÄ£Ê½µÄunsigned longĞÍÊı¾İ×ª»»µ½´ó¶ËÄ£Ê½µÄTCP/IP ÍøÂç×Ö½Ú¸ñÊ½µÄÊı¾İ.
-*@param		Òª×ª»»µÄÊı¾İ
-*@return 	´ó¶ËÄ£Ê½µÄÊı¾İ
+*@brief		å°†ä¸€ä¸ª ä¸»æœºæ¨¡å¼çš„unsigned longå‹æ•°æ®è½¬æ¢åˆ°å¤§ç«¯æ¨¡å¼çš„TCP/IP ç½‘ç»œå­—èŠ‚æ ¼å¼çš„æ•°æ®.
+*@param		è¦è½¬æ¢çš„æ•°æ®
+*@return 	å¤§ç«¯æ¨¡å¼çš„æ•°æ®
 */ 
 unsigned long htonl(
 	unsigned long hostlong		/**< hostshort  - A 32-bit number in host byte order.  */
@@ -344,9 +344,9 @@ unsigned long htonl(
 
 
 /**
-*@brief		½«Ò»¸ö´ó¶ËÄ£Ê½µÄTCP/IP ÍøÂç×Ö½Ú¸ñÊ½µÄÊı¾İ×ª»»µ½Ö÷»úÄ£Ê½µÄunsigned shortĞÍÊı¾İ
-*@param		Òª×ª»»µÄÊı¾İ
-*@return 	unsigned shortÄ£Ê½µÄÊı¾İ
+*@brief		å°†ä¸€ä¸ªå¤§ç«¯æ¨¡å¼çš„TCP/IP ç½‘ç»œå­—èŠ‚æ ¼å¼çš„æ•°æ®è½¬æ¢åˆ°ä¸»æœºæ¨¡å¼çš„unsigned shortå‹æ•°æ®
+*@param		è¦è½¬æ¢çš„æ•°æ®
+*@return 	unsigned shortæ¨¡å¼çš„æ•°æ®
 */ 
 unsigned long ntohs(
 	unsigned short netshort	/**< netshort - network odering 16bit value */
@@ -361,9 +361,9 @@ unsigned long ntohs(
 
 
 /**
-*@brief		½«Ò»¸ö´ó¶ËÄ£Ê½µÄTCP/IP ÍøÂç×Ö½Ú¸ñÊ½µÄÊı¾İ×ª»»µ½Ö÷»úÄ£Ê½µÄunsigned longĞÍÊı¾İ
-*@param		Òª×ª»»µÄÊı¾İ
-*@return 	unsigned longÄ£Ê½µÄÊı¾İ
+*@brief		å°†ä¸€ä¸ªå¤§ç«¯æ¨¡å¼çš„TCP/IP ç½‘ç»œå­—èŠ‚æ ¼å¼çš„æ•°æ®è½¬æ¢åˆ°ä¸»æœºæ¨¡å¼çš„unsigned longå‹æ•°æ®
+*@param		è¦è½¬æ¢çš„æ•°æ®
+*@return 	unsigned longæ¨¡å¼çš„æ•°æ®
 */ 
 unsigned long ntohl(unsigned long netlong)
 {
@@ -377,9 +377,9 @@ unsigned long ntohl(unsigned long netlong)
 
 
 /**
-*@brief		¼ÆËã×Ö·û´®Ğ£ÑéÖµ
-*@param		Òª×ª»»µÄÊı¾İ
-*@return 	Ğ£ÑéÖµ
+*@brief		è®¡ç®—å­—ç¬¦ä¸²æ ¡éªŒå€¼
+*@param		è¦è½¬æ¢çš„æ•°æ®
+*@return 	æ ¡éªŒå€¼
 */ 
 unsigned short checksum(
 	unsigned char * src, 	/**< pointer to stream  */
@@ -414,9 +414,9 @@ unsigned short checksum(
 }
 
 /**
-*@brief		¼ì²éµØÖ·ÊÇ·ñÅúÆÀ
-*@param		Òª×ª»»µÄÊı¾İ
-*@return 	³É¹¦Îª1 Ê§°ÜÎª0
+*@brief		æ£€æŸ¥åœ°å€æ˜¯å¦æ‰¹è¯„
+*@param		è¦è½¬æ¢çš„æ•°æ®
+*@return 	æˆåŠŸä¸º1 å¤±è´¥ä¸º0
 */ 
 u_char check_dest_in_local(u_long destip)
 {

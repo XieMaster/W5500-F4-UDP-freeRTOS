@@ -9,24 +9,24 @@
 
 typedef  void (*pFunction)(void);
 
-extern uint8  	remote_ip[4];															/*Ô¶¶ËIPµØÖ·*/
-extern uint16 	remote_port;															/*Ô¶¶Ë¶Ë¿ÚºÅ*/
-extern uint16		local_port;																/*¶¨Òå±¾µØ¶Ë¿Ú*/
-extern uint8  	use_dhcp;																	/*ÊÇ·ñÊ¹ÓÃDHCP»ñÈ¡IP*/
-extern uint8  	use_eeprom;																/*ÊÇ·ñÊ¹ÓÃEEPROMÖĞµÄIPÅäÖÃĞÅÏ¢*/
+extern uint8  	remote_ip[4];															/*è¿œç«¯IPåœ°å€*/
+extern uint16 	remote_port;															/*è¿œç«¯ç«¯å£å·*/
+extern uint16		local_port;																/*å®šä¹‰æœ¬åœ°ç«¯å£*/
+extern uint8  	use_dhcp;																	/*æ˜¯å¦ä½¿ç”¨DHCPè·å–IP*/
+extern uint8  	use_eeprom;																/*æ˜¯å¦ä½¿ç”¨EEPROMä¸­çš„IPé…ç½®ä¿¡æ¯*/
 
-/*¶¨ÒåSPI1×÷ÎªW5500µÄÓ²¼ş½Ó¿Ú*/
-//#define WIZ_SCS									GPIO_Pin_4								/*¶¨ÒåW5500µÄÆ¬Ñ¡¹Ü½Å*/
-//#define WIZ_SCLK								GPIO_Pin_5								/*¶¨ÒåW5500µÄÊ±ÖÓ¹Ü½Å*/
-//#define WIZ_MISO								GPIO_Pin_6								/*¶¨ÒåW5500µÄMISO¹Ü½Å*/
-//#define WIZ_MOSI								GPIO_Pin_7								/*¶¨ÒåW5500µÄMOSI¹Ü½Å*/
+/*å®šä¹‰SPI1ä½œä¸ºW5500çš„ç¡¬ä»¶æ¥å£*/
+//#define WIZ_SCS									GPIO_Pin_4								/*å®šä¹‰W5500çš„ç‰‡é€‰ç®¡è„š*/
+//#define WIZ_SCLK								GPIO_Pin_5								/*å®šä¹‰W5500çš„æ—¶é’Ÿç®¡è„š*/
+//#define WIZ_MISO								GPIO_Pin_6								/*å®šä¹‰W5500çš„MISOç®¡è„š*/
+//#define WIZ_MOSI								GPIO_Pin_7								/*å®šä¹‰W5500çš„MOSIç®¡è„š*/
 
 
 #define STM32F407ZGT6
 
 #ifdef STM32F407ZGT6   
-  #define WIZ_RESET							  GPIO_Pin_5								/*¶¨ÒåW5500µÄRESET¹Ü½ÅPC5*/
-  #define WIZ_INT								  GPIO_Pin_4								/*¶¨ÒåW5500µÄINT¹Ü½ÅPC4*/
+  #define WIZ_RESET							  GPIO_Pin_5								/*å®šä¹‰W5500çš„RESETç®¡è„šPC5*/
+  #define WIZ_INT								  GPIO_Pin_4								/*å®šä¹‰W5500çš„INTç®¡è„šPC4*/
 #endif
 
 #define FW_VER_HIGH  						1               
@@ -36,38 +36,38 @@ extern uint8  	use_eeprom;																/*ÊÇ·ñÊ¹ÓÃEEPROMÖĞµÄIPÅäÖÃĞÅÏ¢*/
 #define HIGH	           	 			1
 #define LOW		             			0
 
-#define MAX_BUF_SIZE		 				1460											 /*¶¨ÒåÃ¿¸öÊı¾İ°üµÄ´óĞ¡*/
+#define MAX_BUF_SIZE		 				1460											 /*å®šä¹‰æ¯ä¸ªæ•°æ®åŒ…çš„å¤§å°*/
 #define KEEP_ALIVE_TIME	     		30	// 30sec
 #define TX_RX_MAX_BUF_SIZE      2048							 
 #define EEPROM_MSG_LEN        	sizeof(EEPROM_MSG)
 
-#define IP_FROM_DEFINE	           	 			0                /*Ê¹ÓÃ³õÊ¼¶¨ÒåµÄIPĞÅÏ¢*/
-#define IP_FROM_DHCP	              			1                /*Ê¹ÓÃDHCP»ñÈ¡IPĞÅÏ¢*/
-#define IP_FROM_EEPROM	                  2								 /*Ê¹ÓÃEEPROM¶¨ÒåµÄIPĞÅÏ¢*/
-extern uint8	ip_from;											               /*Ñ¡ÔñIPĞÅÏ¢ÅäÖÃÔ´*/
+#define IP_FROM_DEFINE	           	 			0                /*ä½¿ç”¨åˆå§‹å®šä¹‰çš„IPä¿¡æ¯*/
+#define IP_FROM_DHCP	              			1                /*ä½¿ç”¨DHCPè·å–IPä¿¡æ¯*/
+#define IP_FROM_EEPROM	                  2								 /*ä½¿ç”¨EEPROMå®šä¹‰çš„IPä¿¡æ¯*/
+extern uint8	ip_from;											               /*é€‰æ‹©IPä¿¡æ¯é…ç½®æº*/
 #pragma pack(1)
-/*´Ë½á¹¹Ìå¶¨ÒåÁËW5500¿É¹©ÅäÖÃµÄÖ÷Òª²ÎÊı*/
+/*æ­¤ç»“æ„ä½“å®šä¹‰äº†W5500å¯ä¾›é…ç½®çš„ä¸»è¦å‚æ•°*/
 typedef struct _CONFIG_MSG											
 {
-  uint8 mac[6];																							/*MACµØÖ·*/
-  uint8 lip[4];																							/*local IP±¾µØIPµØÖ·*/
-  uint8 sub[4];																							/*×ÓÍøÑÚÂë*/
-  uint8 gw[4];																							/*Íø¹Ø*/	
-  uint8 dns[4];																							/*DNS·şÎñÆ÷µØÖ·*/
-  uint8 rip[4];																							/*remote IPÔ¶³ÌIPµØÖ·*/
-	uint8 sw_ver[2];																					/*Èí¼ş°æ±¾ºÅ*/
+  uint8 mac[6];																							/*MACåœ°å€*/
+  uint8 lip[4];																							/*local IPæœ¬åœ°IPåœ°å€*/
+  uint8 sub[4];																							/*å­ç½‘æ©ç */
+  uint8 gw[4];																							/*ç½‘å…³*/	
+  uint8 dns[4];																							/*DNSæœåŠ¡å™¨åœ°å€*/
+  uint8 rip[4];																							/*remote IPè¿œç¨‹IPåœ°å€*/
+	uint8 sw_ver[2];																					/*è½¯ä»¶ç‰ˆæœ¬å·*/
 
 }CONFIG_MSG;
 #pragma pack()
 
 #pragma pack(1)
-/*´Ë½á¹¹Ìå¶¨ÒåÁËeepromĞ´ÈëµÄ¼¸¸ö±äÁ¿£¬¿É°´ĞèĞŞ¸Ä*/
+/*æ­¤ç»“æ„ä½“å®šä¹‰äº†eepromå†™å…¥çš„å‡ ä¸ªå˜é‡ï¼Œå¯æŒ‰éœ€ä¿®æ”¹*/
 typedef struct _EEPROM_MSG	                    
 {
-	uint8 mac[6];																							/*MACµØÖ·*/
-  uint8 lip[4];																							/*local IP±¾µØIPµØÖ·*/
-  uint8 sub[4];																							/*×ÓÍøÑÚÂë*/
-  uint8 gw[4];																							/*Íø¹Ø*/
+	uint8 mac[6];																							/*MACåœ°å€*/
+  uint8 lip[4];																							/*local IPæœ¬åœ°IPåœ°å€*/
+  uint8 sub[4];																							/*å­ç½‘æ©ç */
+  uint8 gw[4];																							/*ç½‘å…³*/
 }EEPROM_MSG_STR;
 #pragma pack()
 
@@ -75,34 +75,34 @@ typedef __IO uint8_t  vu8;
 
 extern EEPROM_MSG_STR EEPROM_MSG;
 extern CONFIG_MSG  	ConfigMsg;
-extern uint8 dhcp_ok;																				/*DHCP»ñÈ¡³É¹¦*/
-extern uint32	dhcp_time;																		/*DHCPÔËĞĞ¼ÆÊı*/
-extern vu8	ntptimer;																				/*NPTÃë¼ÆÊı*/
+extern uint8 dhcp_ok;																				/*DHCPè·å–æˆåŠŸ*/
+extern uint32	dhcp_time;																		/*DHCPè¿è¡Œè®¡æ•°*/
+extern vu8	ntptimer;																				/*NPTç§’è®¡æ•°*/
 
-/*MCUÅäÖÃÏà¹Øº¯Êı*/
-void gpio_for_w5500_config(void);														/*SPI½Ó¿Úreset ¼°ÖĞ¶ÏÒı½Å*/
-void timer2_init(void);																			/*STM32¶¨Ê±Æ÷2³õÊ¼»¯*/
-//void timer2_isr(void);																			/*¶¨Ê±Æ÷ÖĞ¶ÏÖ´ĞĞµÄº¯Êı*/
-void reboot(void);																					/*STM32Èí¸´Î»*/
-void write_config_to_eeprom(void);													/*Ğ´ÅäÖÃĞÅÏ¢µ½EEPROMÖĞ*/
-void read_config_from_eeprom(void);													/*´ÓEEPROMÖĞ¶Á³öĞÅÏ¢*/
+/*MCUé…ç½®ç›¸å…³å‡½æ•°*/
+void gpio_for_w5500_config(void);														/*SPIæ¥å£reset åŠä¸­æ–­å¼•è„š*/
+void timer2_init(void);																			/*STM32å®šæ—¶å™¨2åˆå§‹åŒ–*/
+//void timer2_isr(void);																			/*å®šæ—¶å™¨ä¸­æ–­æ‰§è¡Œçš„å‡½æ•°*/
+void reboot(void);																					/*STM32è½¯å¤ä½*/
+void write_config_to_eeprom(void);													/*å†™é…ç½®ä¿¡æ¯åˆ°EEPROMä¸­*/
+void read_config_from_eeprom(void);													/*ä»EEPROMä¸­è¯»å‡ºä¿¡æ¯*/
 
-/*W5500SPIÏà¹Øº¯Êı*/
-void IINCHIP_WRITE( uint32 addrbsb,  uint8 data);						/*Ğ´ÈëÒ»¸ö8Î»Êı¾İµ½W5500*/
-uint8 IINCHIP_READ(uint32 addrbsb);													/*´ÓW5500¶Á³öÒ»¸ö8Î»Êı¾İ*/
-uint16 wiz_write_buf(uint32 addrbsb,uint8* buf,uint16 len);	/*ÏòW5500Ğ´Èëlen×Ö½ÚÊı¾İ*/
-uint16 wiz_read_buf(uint32 addrbsb, uint8* buf,uint16 len);	/*´ÓW5500¶Á³ölen×Ö½ÚÊı¾İ*/
+/*W5500SPIç›¸å…³å‡½æ•°*/
+void IINCHIP_WRITE( uint32 addrbsb,  uint8 data);						/*å†™å…¥ä¸€ä¸ª8ä½æ•°æ®åˆ°W5500*/
+uint8 IINCHIP_READ(uint32 addrbsb);													/*ä»W5500è¯»å‡ºä¸€ä¸ª8ä½æ•°æ®*/
+uint16 wiz_write_buf(uint32 addrbsb,uint8* buf,uint16 len);	/*å‘W5500å†™å…¥lenå­—èŠ‚æ•°æ®*/
+uint16 wiz_read_buf(uint32 addrbsb, uint8* buf,uint16 len);	/*ä»W5500è¯»å‡ºlenå­—èŠ‚æ•°æ®*/
 
-/*W5500»ù±¾ÅäÖÃÏà¹Øº¯Êı*/
-void reset_w5500(void);																			/*Ó²¸´Î»W5500*/
-void set_w5500_mac(void);																		/*ÅäÖÃW5500µÄMACµØÖ·*/
-void set_w5500_ip(void);																		/*ÅäÖÃW5500µÄIPµØÖ·*/
+/*W5500åŸºæœ¬é…ç½®ç›¸å…³å‡½æ•°*/
+void reset_w5500(void);																			/*ç¡¬å¤ä½W5500*/
+void set_w5500_mac(void);																		/*é…ç½®W5500çš„MACåœ°å€*/
+void set_w5500_ip(void);																		/*é…ç½®W5500çš„IPåœ°å€*/
 
-/*ĞèÒªÓÃ¶¨Ê±µÄµÄÓ¦ÓÃº¯Êı*/
-void dhcp_timer_init(void);																	/*dhcpÓÃµ½µÄ¶¨Ê±Æ÷³õÊ¼»¯*/
-void ntp_timer_init(void);																	/*nptÓÃµ½µÄ¶¨Ê±Æ÷³õÊ¼»¯*/
+/*éœ€è¦ç”¨å®šæ—¶çš„çš„åº”ç”¨å‡½æ•°*/
+void dhcp_timer_init(void);																	/*dhcpç”¨åˆ°çš„å®šæ—¶å™¨åˆå§‹åŒ–*/
+void ntp_timer_init(void);																	/*nptç”¨åˆ°çš„å®šæ—¶å™¨åˆå§‹åŒ–*/
 
-void delay_ms( uint32 time_ms );                            /*¶¨Ê±Æ÷2ÊµÏÖµÄÑÓÊ±ms*/
+void delay_ms( uint32 time_ms );                            /*å®šæ—¶å™¨2å®ç°çš„å»¶æ—¶ms*/
 
 
 #endif

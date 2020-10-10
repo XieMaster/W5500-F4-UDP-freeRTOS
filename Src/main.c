@@ -44,8 +44,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-extern unsigned int Timer2_Counter;   //Timer2¶¨Ê±Æ÷¼ÆÊı±äÁ¿(ms)
-extern uint32	ms;										  /*ºÁÃë¼ÆÊı*/
+extern unsigned int Timer2_Counter;   //Timer2å®šæ—¶å™¨è®¡æ•°å˜é‡(ms)
+extern uint32	ms;										  /*æ¯«ç§’è®¡æ•°*/
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -112,16 +112,16 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
   
-  gpio_for_w5500_config();	         	/*³õÊ¼»¯MCUÏà¹ØÒı½Å*/
-  reset_w5500();					            /*Ó²¸´Î»W5500*/
-	set_w5500_mac();                    /*ÅäÖÃMACµØÖ·*/
-  set_w5500_ip();                     /*ÅäÖÃIPµØÖ·*/
-  socket_buf_init(txsize, rxsize);    /*³õÊ¼»¯8¸öSocketµÄ·¢ËÍ½ÓÊÕ»º´æ´óĞ¡*/
+  gpio_for_w5500_config();	         	/*åˆå§‹åŒ–MCUç›¸å…³å¼•è„š*/
+  reset_w5500();					            /*ç¡¬å¤ä½W5500*/
+	set_w5500_mac();                    /*é…ç½®MACåœ°å€*/
+  set_w5500_ip();                     /*é…ç½®IPåœ°å€*/
+  socket_buf_init(txsize, rxsize);    /*åˆå§‹åŒ–8ä¸ªSocketçš„å‘é€æ¥æ”¶ç¼“å­˜å¤§å°*/
 	
 	printf(" UDP_MODE \r\n");
 	printf(" W5500 local_port:%d \r\n",local_port);
 	printf("      remote_port:%d \r\n",remote_port);
-	printf(" ÉèÖÃW5500-MAC-IPÍê³É \r\n");
+	printf(" è®¾ç½®W5500-MAC-IPå®Œæˆ \r\n");
 
   /* USER CODE END 2 */
 
@@ -216,9 +216,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(ms >= 1000)
     {  
       ms = 0;
-      dhcp_time++;																					/*DHCP¶¨Ê±¼Ó1S*/
+      dhcp_time++;																					/*DHCPå®šæ—¶åŠ 1S*/
       #ifndef	__NTP_H__
-      ntptimer++;																						/*NTPÖØÊÔÊ±¼ä¼Ó1S*/
+      ntptimer++;																						/*NTPé‡è¯•æ—¶é—´åŠ 1S*/
       #endif
       HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
     }
